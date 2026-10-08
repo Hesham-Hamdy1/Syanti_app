@@ -8,7 +8,7 @@ class SyantiApp extends StatelessWidget {
   const SyantiApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)  {
     return MaterialApp(
       title: 'صيانتي' ,
       theme: ThemeData(
