@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'screens/requests/my_requests_screen.dart';
 import 'theme/app_theme.dart';
 
 void main() {
@@ -22,11 +23,7 @@ class SyantiApp extends StatelessWidget {
           child: child ?? const SizedBox.shrink(),
         );
       },
-      home: Scaffold(
-        body: Center(
-          child: Text('صيانتي', style: AppText.screenTitle),
-        ),
-      ),
+      home: const MyRequestsScreen(),
     );
   }
 }
