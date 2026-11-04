@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syanti_app/screens/auth/profile_screen.dart';
 import 'package:syanti_app/screens/auth/welcome_screen.dart';
 
-import 'screens/requests/my_requests_screen.dart';
 import 'theme/app_theme.dart';
 
 void main() {
