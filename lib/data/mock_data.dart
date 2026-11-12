@@ -89,13 +89,5 @@ class MockData {
       'title': 'Brake Maintenance',
       'date': '2026-11-02',
     },
-
-    {
-      'id': 2,
-      'carId': 1,
-      'requestId': 1,
-      'title': 'Oil Change',
-      'date': '2026-11-01',
-    },
   ];
 }

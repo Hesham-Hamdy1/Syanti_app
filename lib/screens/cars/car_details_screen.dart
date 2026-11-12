@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/mock_data.dart';
 import '../../theme/app_theme.dart';
+import '../maintenance/maintenance_history_screen.dart';
 import 'add_edit_car_screen.dart';
 
 class CarDetailsScreen extends StatefulWidget {
@@ -125,8 +126,12 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
                 height: AppMetrics.buttonHeight,
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('سجل الصيانة - قريبًا')),
+                    Navigator.push<void>(
+                      context,
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) =>
+                            MaintenanceHistoryScreen(carId: car['id']),
+                      ),
                     );
                   },
                   child: const Text('سجل الصيانة'),

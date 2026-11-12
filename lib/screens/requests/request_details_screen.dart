@@ -10,9 +10,16 @@ import 'widgets/request_status.dart';
 import 'widgets/status_badge_widget.dart';
 
 class RequestDetailsScreen extends StatefulWidget {
-  const RequestDetailsScreen({this.request, super.key});
+  const RequestDetailsScreen({
+    this.request,
+    this.canManage = false,
+    super.key,
+  });
 
   final RequestCardData? request;
+
+  /// أزرار القبول والرفض والإكمال للميكانيكي بس، صاحب العربية بيتفرج فقط
+  final bool canManage;
 
   @override
   State<RequestDetailsScreen> createState() => _RequestDetailsScreenState();
@@ -41,12 +48,15 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     }
 
     return RequestCardData(
+      id: request.id,
       service: request.service,
       car: request.car,
       date: request.date,
       workshop: request.workshop,
       status: _status,
       owner: request.owner,
+      ownerPhone: request.ownerPhone,
+      notes: request.notes,
     );
   }
 
@@ -65,12 +75,17 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
     return RequestScreenShellWidget(
       title: 'تفاصيل الطلب',
       onBack: () => Navigator.pop(context, _updatedRequest()),
-      bottomAction: RequestActionsWidget(
-        onAccept: () => _updateStatus(RequestStatus.accepted, 'تم قبول الطلب'),
-        onReject: () => _updateStatus(RequestStatus.rejected, 'تم رفض الطلب'),
-        onComplete: () =>
-            _updateStatus(RequestStatus.completed, 'تم إكمال الطلب'),
-      ),
+      bottomAction: widget.canManage
+          ? RequestActionsWidget(
+              status: _status,
+              onAccept: () =>
+                  _updateStatus(RequestStatus.accepted, 'تم قبول الطلب'),
+              onReject: () =>
+                  _updateStatus(RequestStatus.rejected, 'تم رفض الطلب'),
+              onComplete: () =>
+                  _updateStatus(RequestStatus.completed, 'تم إكمال الطلب'),
+            )
+          : null,
       body: ListView(
         padding: const EdgeInsets.fromLTRB(17, 8, 17, 20),
         children: <Widget>[
@@ -110,7 +125,7 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
           ),
           const SizedBox(height: 7),
           Text(
-            'رقم الطلب: #REQ-1048',
+            'رقم الطلب: #${widget.request?.id ?? 'REQ-1048'}',
             style: AppText.fieldLabel.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 19),
@@ -127,10 +142,13 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
           ),
           const SizedBox(height: 17),
           const RequestSectionHeadingWidget('بيانات صاحب السيارة'),
-          const RequestDetailCardWidget(
+          RequestDetailCardWidget(
             items: <RequestDetailItem>[
-              RequestDetailItem('الاسم', 'أحمد محمد'),
-              RequestDetailItem('رقم الهاتف', '01012345678'),
+              RequestDetailItem('الاسم', widget.request?.owner ?? 'أحمد محمد'),
+              RequestDetailItem(
+                'رقم الهاتف',
+                widget.request?.ownerPhone ?? '01012345678',
+              ),
             ],
           ),
           const SizedBox(height: 17),
@@ -145,7 +163,10 @@ class _RequestDetailsScreenState extends State<RequestDetailsScreen> {
                 'الموعد',
                 widget.request?.date ?? '04 نوفمبر 2026 • 10:30 ص',
               ),
-              RequestDetailItem('ملاحظات', 'صوت غير معتاد عند تشغيل المحرك'),
+              RequestDetailItem(
+                'ملاحظات',
+                widget.request?.notes ?? 'صوت غير معتاد عند تشغيل المحرك',
+              ),
             ],
           ),
         ],

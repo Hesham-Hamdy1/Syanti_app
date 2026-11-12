@@ -7,7 +7,10 @@ class RequestCardData {
     required this.date,
     required this.workshop,
     required this.status,
+    this.id,
     this.owner,
+    this.ownerPhone,
+    this.notes,
   });
 
   final String service;
@@ -15,5 +18,8 @@ class RequestCardData {
   final String date;
   final String workshop;
   final RequestStatus status;
+  final String? id;
   final String? owner;
+  final String? ownerPhone;
+  final String? notes;
 }

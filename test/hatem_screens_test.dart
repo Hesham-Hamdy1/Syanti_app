@@ -64,5 +64,8 @@ void main() {
     expect(added['mechanicPhone'], MockData.mockMechanics.first['phone']);
     expect(added['serviceType'], 'تغيير زيت وفلاتر');
     expect(added['carId'], 1);
+
+    // الطلب الجديد بيظهر فوراً في شاشة طلباتي لأنها بتقرأ نفس القائمة
+    expect(find.text('تغيير زيت وفلاتر'), findsOneWidget);
   });
 }

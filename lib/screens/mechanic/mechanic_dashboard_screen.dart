@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../data/mock_data.dart';
+import '../../data/request_mapping.dart';
 import '../../theme/app_theme.dart';
+import '../auth/login_screen.dart';
 import '../requests/widgets/request_info_line_widget.dart';
 import '../requests/widgets/status_badge_widget.dart';
 import 'mechanic_profile_screen.dart';
-import 'mechanic_request_helpers.dart';
 import 'mechanic_requests_preview_screen.dart';
 
 class MechanicDashboardScreen extends StatefulWidget {
@@ -56,6 +57,17 @@ class _MechanicDashboardScreenState extends State<MechanicDashboardScreen> {
     }
   }
 
+  void _logout() {
+    MockData.currentUser = null;
+    Navigator.pushAndRemoveUntil<void>(
+      context,
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => const LoginScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic>? workshop = _workshop;
@@ -91,6 +103,11 @@ class _MechanicDashboardScreenState extends State<MechanicDashboardScreen> {
               onPressed: () => _open(const MechanicProfileScreen()),
               icon: const Icon(Icons.person_outline),
               tooltip: 'بيانات الورشة',
+            ),
+            IconButton(
+              onPressed: _logout,
+              icon: const Icon(Icons.logout),
+              tooltip: 'تسجيل الخروج',
             ),
           ],
         ),

@@ -23,7 +23,7 @@ class SyantiApp extends StatelessWidget {
           child: child ?? const SizedBox.shrink(),
         );
       },
-      home: Scaffold(body: WelcomeScreen()),
+      home: const WelcomeScreen(),
     );
   }
 }

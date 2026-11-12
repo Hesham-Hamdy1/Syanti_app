@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 import '../../data/mock_data.dart';
 import '../../theme/app_theme.dart';
+import '../cars/home_screen.dart';
+import '../mechanic/mechanic_dashboard_screen.dart';
 import 'signup_screen.dart';
-import 'profile_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -58,11 +59,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     MockData.currentUser = loggedUser;
 
+    final Widget target = loggedUser['userType'] == 'mechanic'
+        ? const MechanicDashboardScreen()
+        : const HomeScreen();
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (context) => const ProfileScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => target),
     );
   }
 
