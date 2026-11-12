@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../data/mock_data.dart';
 import '../../theme/app_theme.dart';
+import '../auth/profile_screen.dart';
+import '../maintenance/notifications_screen.dart';
+import '../requests/mechanics_list_screen.dart';
+import '../requests/my_requests_screen.dart';
 import 'my_cars_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,22 +54,58 @@ class _HomeScreenState extends State<HomeScreen> {
                       size: 36,
                     ),
                     const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('مرحباً $name', style: AppText.screenTitle),
-                        Text(
-                          'سيارتك في أمان',
-                          style: AppText.body.copyWith(
-                            color: AppColors.textSecondary,
-                            fontSize: 12,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const ProfileScreen(),
                           ),
-                        ),
-                      ],
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('مرحباً $name', style: AppText.screenTitle),
+                          Text(
+                            'سيارتك في أمان',
+                            style: AppText.body.copyWith(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     const Spacer(),
                     IconButton(
-                      onPressed: () => _comingSoon('الإشعارات'),
+                      onPressed: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const MyRequestsScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.receipt_long_outlined,
+                        color: AppColors.primaryAction,
+                        size: 25,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const NotificationsScreen(),
+                          ),
+                        );
+                      },
                       icon: const Icon(
                         Icons.notifications_none,
                         color: AppColors.primaryAction,
@@ -178,7 +218,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 side: const BorderSide(color: AppColors.primaryAction),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppMetrics.radius)),
                               ),
-                              onPressed: () => _comingSoon('طلب صيانة'),
+                              onPressed: () {
+                                Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        const MechanicsListScreen(),
+                                  ),
+                                );
+                              },
                               child: const Text('طلب صيانة'),
                             ),
                           ),
@@ -199,7 +247,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   childAspectRatio: 1.1,
                   children: services.map((service) {
                     return InkWell(
-                      onTap: () => _comingSoon((service['title'] as String).replaceAll('\n', ' ')),
+                      onTap: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const MechanicsListScreen(),
+                          ),
+                        );
+                      },
                       borderRadius: BorderRadius.circular(AppMetrics.radius),
                       child: Container(
                         decoration: BoxDecoration(

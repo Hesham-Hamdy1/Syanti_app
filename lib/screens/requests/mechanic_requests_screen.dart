@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'widgets/request_card_data.dart';
+import '../../data/mock_data.dart';
+import '../../data/request_mapping.dart';
+import '../../theme/app_theme.dart';
+import 'request_details_screen.dart';
 import 'widgets/request_card_widget.dart';
 import 'widgets/request_filter_chip_widget.dart';
 import 'widgets/request_screen_shell_widget.dart';
 import 'widgets/request_section_heading_widget.dart';
-import 'widgets/request_status.dart';
 import 'widgets/request_summary_banner_widget.dart';
-import 'request_details_screen.dart';
 
 class MechanicRequestsScreen extends StatefulWidget {
   const MechanicRequestsScreen({super.key});
@@ -17,40 +18,28 @@ class MechanicRequestsScreen extends StatefulWidget {
 }
 
 class _MechanicRequestsScreenState extends State<MechanicRequestsScreen> {
-  final List<RequestCardData> _requests = <RequestCardData>[
-    RequestCardData(
-      service: 'تغيير زيت المحرك',
-      car: 'تويوتا كورولا • 2022',
-      date: '04 نوفمبر 2026 • 10:30 ص',
-      workshop: 'مركز الأمان لصيانة السيارات',
-      status: RequestStatus.pending,
-      owner: 'أحمد محمد',
-    ),
-    RequestCardData(
-      service: 'فحص شامل للسيارة',
-      car: 'نيسان صني • 2021',
-      date: '04 نوفمبر 2026 • 12:00 م',
-      workshop: 'مركز الأمان لصيانة السيارات',
-      status: RequestStatus.pending,
-      owner: 'محمود علي',
-    ),
-    RequestCardData(
-      service: 'فحص الفرامل',
-      car: 'هيونداي إلنترا • 2020',
-      date: '03 نوفمبر 2026 • 03:30 م',
-      workshop: 'مركز الأمان لصيانة السيارات',
-      status: RequestStatus.accepted,
-      owner: 'سارة خالد',
-    ),
-  ];
+  List<Map<String, dynamic>> get _requests {
+    final String? phone = MockData.currentUser?['phone']?.toString();
+    if (phone == null || phone.isEmpty) {
+      return <Map<String, dynamic>>[];
+    }
 
-  Future<void> _openRequest(int index) async {
+    return MockData.mockRequests
+        .where((Map<String, dynamic> request) {
+          return request['mechanicPhone']?.toString() == phone;
+        })
+        .toList();
+  }
+
+  Future<void> _openRequest(Map<String, dynamic> request) async {
     final RequestCardData? updatedRequest =
         await Navigator.push<RequestCardData>(
           context,
           MaterialPageRoute<RequestCardData>(
-            builder: (BuildContext context) =>
-                RequestDetailsScreen(request: _requests[index]),
+            builder: (BuildContext context) => RequestDetailsScreen(
+              request: requestCardFromMap(request),
+              canManage: true,
+            ),
           ),
         );
 
@@ -58,13 +47,16 @@ class _MechanicRequestsScreenState extends State<MechanicRequestsScreen> {
       return;
     }
 
+    // الحالة بتتكتب في نفس الطلب المشترك، والسجل بيتضاف مرة واحدة عند الإكمال
     setState(() {
-      _requests[index] = updatedRequest;
+      writeRequestStatus(request, updatedRequest.status);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, dynamic>> requests = _requests;
+
     return RequestScreenShellWidget(
       title: 'طلبات الصيانة',
       body: ListView(
@@ -88,14 +80,24 @@ class _MechanicRequestsScreenState extends State<MechanicRequestsScreen> {
           ),
           const SizedBox(height: 17),
           const RequestSectionHeadingWidget('الطلبات الواردة'),
-          ..._requests.asMap().entries.map(
-            (MapEntry<int, RequestCardData> entry) => RequestCardWidget(
-              request: entry.value,
-              showOwner: true,
-              showDetailsButton: true,
-              onTap: () => _openRequest(entry.key),
+          if (requests.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: Text(
+                'مفيش طلبات واردة لحد الآن',
+                textAlign: TextAlign.center,
+                style: AppText.body.copyWith(color: AppColors.textSecondary),
+              ),
+            )
+          else
+            ...requests.map(
+              (Map<String, dynamic> request) => RequestCardWidget(
+                request: requestCardFromMap(request),
+                showOwner: true,
+                showDetailsButton: true,
+                onTap: () => _openRequest(request),
+              ),
             ),
-          ),
         ],
       ),
     );

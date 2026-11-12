@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../data/mock_data.dart';
+import '../../data/request_mapping.dart';
 import '../../theme/app_theme.dart';
 import '../requests/request_details_screen.dart';
-import '../requests/widgets/request_card_data.dart';
 import '../requests/widgets/request_card_widget.dart';
 import '../requests/widgets/request_screen_shell_widget.dart';
-import 'mechanic_request_helpers.dart';
 
 class MechanicRequestsPreviewScreen extends StatefulWidget {
   const MechanicRequestsPreviewScreen({super.key});
@@ -35,8 +34,10 @@ class _MechanicRequestsPreviewScreenState
     final RequestCardData? updated = await Navigator.push<RequestCardData>(
       context,
       MaterialPageRoute<RequestCardData>(
-        builder: (BuildContext context) =>
-            RequestDetailsScreen(request: requestCardFromMap(request)),
+        builder: (BuildContext context) => RequestDetailsScreen(
+          request: requestCardFromMap(request),
+          canManage: true,
+        ),
       ),
     );
 
@@ -46,7 +47,7 @@ class _MechanicRequestsPreviewScreenState
 
     // شاشة التفاصيل بترجّع الحالة الجديدة، فبنكتبها في نفس الطلب المشترك
     setState(() {
-      request['status'] = requestStatusValue(updated.status);
+      writeRequestStatus(request, updated.status);
     });
   }
 

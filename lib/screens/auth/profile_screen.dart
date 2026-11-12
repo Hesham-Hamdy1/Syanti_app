@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../data/mock_data.dart';
 import '../../theme/app_theme.dart';
+import '../cars/home_screen.dart';
+import '../cars/my_cars_screen.dart';
+import '../requests/completed_requests_screen.dart';
+import '../requests/my_requests_screen.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -181,7 +185,15 @@ class ProfileScreen extends StatelessWidget {
                       _buildMenuItem(
                         icon: Icons.directions_car_outlined,
                         title: 'سياراتي',
-                        onTap: () => _showUnavailable(context),
+                        onTap: () {
+                          Navigator.push<void>(
+                            context,
+                            MaterialPageRoute<void>(
+                              builder: (BuildContext context) =>
+                                  const MyCarsScreen(),
+                            ),
+                          );
+                        },
                       ),
 
                       _buildMenuItem(
@@ -249,19 +261,44 @@ class ProfileScreen extends StatelessWidget {
                       icon: Icons.home_outlined,
                       title: 'الرئيسية',
                       selected: false,
-                      onTap: () => _showUnavailable(context),
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const HomeScreen(),
+                          ),
+                          (Route<dynamic> route) => false,
+                        );
+                      },
                     ),
                     _buildNavItem(
                       icon: Icons.history,
                       title: 'السجل',
                       selected: false,
-                      onTap: () => _showUnavailable(context),
+                      onTap: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const CompletedRequestsScreen(),
+                          ),
+                        );
+                      },
                     ),
                     _buildNavItem(
                       icon: Icons.event_available_outlined,
                       title: 'حجوزاتي',
                       selected: false,
-                      onTap: () => _showUnavailable(context),
+                      onTap: () {
+                        Navigator.push<void>(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) =>
+                                const MyRequestsScreen(),
+                          ),
+                        );
+                      },
                     ),
                     _buildNavItem(
                       icon: Icons.forum_outlined,
