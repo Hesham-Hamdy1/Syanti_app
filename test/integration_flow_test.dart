@@ -7,6 +7,7 @@ import 'package:syanti_app/screens/cars/car_details_screen.dart';
 import 'package:syanti_app/screens/cars/home_screen.dart';
 import 'package:syanti_app/screens/maintenance/maintenance_history_screen.dart';
 import 'package:syanti_app/screens/mechanic/mechanic_dashboard_screen.dart';
+import 'package:syanti_app/screens/mechanic/mechanic_requests_preview_screen.dart';
 import 'package:syanti_app/screens/requests/mechanic_requests_screen.dart';
 import 'package:syanti_app/screens/requests/mechanics_list_screen.dart';
 import 'package:syanti_app/screens/requests/my_requests_screen.dart';
@@ -71,6 +72,25 @@ void main() {
 
     expect(MockData.currentUser, isNull);
     expect(find.byType(LoginScreen), findsOneWidget);
+  });
+
+  testWidgets('mechanic dashboard opens both requests screens', (
+    WidgetTester tester,
+  ) async {
+    MockData.currentUser = MockData.mockUsers[1];
+
+    await tester.pumpWidget(wrap(const MechanicDashboardScreen()));
+
+    await tester.tap(find.text('عرض كل الطلبات'));
+    await tester.pumpAndSettle();
+    expect(find.byType(MechanicRequestsScreen), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.arrow_back));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.visibility_outlined));
+    await tester.pumpAndSettle();
+    expect(find.byType(MechanicRequestsPreviewScreen), findsOneWidget);
   });
 
   testWidgets('owner home opens the shared requests and workshops', (
