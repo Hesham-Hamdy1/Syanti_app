@@ -4,6 +4,7 @@ import '../../data/mock_data.dart';
 import '../../data/request_mapping.dart';
 import '../../theme/app_theme.dart';
 import '../auth/login_screen.dart';
+import '../requests/mechanic_requests_screen.dart';
 import '../requests/widgets/request_info_line_widget.dart';
 import '../requests/widgets/status_badge_widget.dart';
 import 'mechanic_profile_screen.dart';
@@ -190,7 +191,17 @@ class _MechanicDashboardScreenState extends State<MechanicDashboardScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              Text('آخر الطلبات', style: AppText.sectionTitle),
+              Row(
+                children: <Widget>[
+                  Text('آخر الطلبات', style: AppText.sectionTitle),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () => _open(const MechanicRequestsPreviewScreen()),
+                    icon: const Icon(Icons.visibility_outlined, size: 20),
+                    tooltip: 'معاينة الطلبات',
+                  ),
+                ],
+              ),
               const SizedBox(height: 11),
               if (recent.isEmpty)
                 Text(
@@ -241,7 +252,7 @@ class _MechanicDashboardScreenState extends State<MechanicDashboardScreen> {
                 ),
               const SizedBox(height: 10),
               ElevatedButton(
-                onPressed: () => _open(const MechanicRequestsPreviewScreen()),
+                onPressed: () => _open(const MechanicRequestsScreen()),
                 child: const Text('عرض كل الطلبات'),
               ),
             ],
